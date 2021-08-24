@@ -40,7 +40,7 @@ export const create = async (req: Request, res: Response) => {
     }
 
     const newPhrase = await Phrase.create(txt, author);
-    return res.json(newPhrase);
+    return res.status(201).json(newPhrase);
   } catch (err) {
     console.error(err);
   }
@@ -49,7 +49,7 @@ export const create = async (req: Request, res: Response) => {
 export const edit = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    let { txt } = req.body;
+    const { txt } = req.body;
 
     if (!txt.trim()) {
       return res
@@ -57,9 +57,22 @@ export const edit = async (req: Request, res: Response) => {
         .json({ error: "É necessário que envie uma frase" });
     }
 
-    const message = await Phrase.edit(id, txt);
-    return res.json(message);
+    const phrase = await Phrase.edit(id, txt);
+    return res.json(phrase);
   } catch (err) {
     console.error(err);
+  }
+};
+
+export const remove = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const phrase = await Phrase.remove(id);
+
+    return res.json(phrase);
+  } catch (err) {
+    return res.status(400).json({
+      message: "Não foi possível excluir a frase",
+    });
   }
 };

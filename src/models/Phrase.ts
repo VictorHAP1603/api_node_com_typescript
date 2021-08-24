@@ -1,5 +1,5 @@
 import { Model, DataTypes } from "sequelize";
-import { sequelize } from "../../config/db_mysql";
+import { sequelize } from "../config/db_mysql";
 // import { ResponseCreate } from "./types";
 
 interface PhraseInstance extends Model {
@@ -60,5 +60,17 @@ export default {
     return {
       message: "Frase editada com sucesso",
     };
+  },
+
+  async remove(id: string) {
+    let phrase = await this.getById(+id);
+
+    if (phrase) {
+      phrase.destroy();
+
+      return {
+        message: "Frase excluída com sucesso",
+      };
+    } else throw new Error();
   },
 };
